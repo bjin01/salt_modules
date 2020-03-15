@@ -1,5 +1,10 @@
 # saphostagent
-### This salt custom module helps to manage SAP HOST AGENT on minions.
+### This salt custom module helps to manage SAP HOST AGENT with following capabilities:
+* __is_available__ - is saphostagent installed?
+* __is_running__ - is saphostagent running as systemd service 'sapinit'?
+* __get_version__ - returns SAP Host Agent Version and Patch Level.
+* __extract_exe__ - extracts given SAR file.
+* __upgrade__ - upgrades SAP Host Agent with given SAR file.
 
 ```
 # salt "hana-2*" sys.doc saphostagent 
