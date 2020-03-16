@@ -9,7 +9,8 @@
 
 Using pillar to predefine the path and SAR file names create a pillar sls named 'saphostagent.sls'
 Please create pillar data with below key names and structure. Key names must be exactly this you see below.
-Do not forget to add this pillar to your /srv/pillar/top.sls file.
+
+**Do not forget __to add this pillar to your /srv/pillar/top.sls file__ **.
 
 ```
     /srv/pillar/saphostagent.sls
