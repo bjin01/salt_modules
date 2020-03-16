@@ -32,9 +32,9 @@ saphostagent.extract_sar:
 
     /srv/pillar/saphostagent.sls
     saphost:
-      - sapcar_path: /nfsmnt/downloads
-      - saphostagent_sar_file: SAPHOSTAGENT45_45-20009394.SAR
-      - sar_file_path: /nfsmnt/downloads/saphostagent45
+      - sapcar_path: </path/to/directory/where/SAPCAR-is-located>
+      - saphostagent_sar_file: <SAR-full-file-name>
+      - sar_file_path: </path/to/directory/where/SAR-file-is-located>
 
     if you don't use pillar you can also add the params as below:
 
