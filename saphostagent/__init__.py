@@ -2,7 +2,7 @@ from __future__ import absolute_import, print_function
 
 # Import python libs
 import logging
-import os.path
+import os
 import salt
 
 # Import salt libs
@@ -89,14 +89,26 @@ def get_version():
     else:
         return (False, "saphostagent is not running or not installed. Exit.")
 
-def extract_exe(**kwargs):
+def extract_sar(**kwargs):
 
     '''
     A function extracts SAR file to a temp directory!
 
+    If you want to put the parameters in pillar sls named 'saphostagent.sls'
+    Please create pillar data with below key names and structure. Key names must be exactly this you see below.
+    Do not forget to add this pillar to your /srv/pillar/top.sls file.
+
+    /srv/pillar/saphostagent.sls
+    saphost:
+      - sapcar_path: /nfsmnt/downloads
+      - saphostagent_sar_file: SAPHOSTAGENT45_45-20009394.SAR
+      - sar_file_path: /nfsmnt/downloads/saphostagent45
+
+    if you don't use pillar you can also add the params as below:
+
     CLI Example::
 
-        salt '*' saphostagent.extract_exe SAPCAR="/mnt/software/SAPCAR" SAR_FILE="/nfsmnt/software/saphostagent45/SAPHOSTAGENT45_45-20009394.SAR" TARGET_DIR="/otherdir/for/extracted_files"
+        salt '*' saphostagent.extract_sar SAPCAR="/mnt/software/SAPCAR" SAR_FILE="/nfsmnt/software/saphostagent45/SAPHOSTAGENT45_45-20009394.SAR" TARGET_DIR="/otherdir/for/extracted_files"
     '''
 
     target_dir = None
@@ -107,9 +119,16 @@ def extract_exe(**kwargs):
     for key, value in kwargs.items():
         if "SAPCAR" in key:
             sapcar = value
+        else:
+            ret_pillar_sapcar = __salt__['pillar.get']('saphost:sapcar_path', '')
+            sapcar = os.path.join(ret_pillar_sapcar, 'SAPCAR')
 
         if  "SAR_FILE" in key:
             sarfile = value
+        else:
+            ret_pillar_sarpath = __salt__['pillar.get']('saphost:sar_file_path', '')
+            ret_pillar_sarfile = __salt__['pillar.get']('saphost:saphostagent_sar_file', '')
+            sarfile = os.path.join(ret_pillar_sarpath, ret_pillar_sarfile)
         
         if "TARGET_DIR" in key:
             target_dir = value
@@ -154,7 +173,7 @@ def extract_exe(**kwargs):
         if ret_extract is not None:
             return (True, output_dict)
     else:
-        return (False, "no sufficient key value pairs provided. Refer to sys.doc saphostagent.extract_exe for more information.")
+        return (False, "no sufficient key value pairs provided. Refer to sys.doc saphostagent.extract_sar for more information.")
 
 
 def upgrade(**kwargs):
@@ -162,6 +181,17 @@ def upgrade(**kwargs):
     '''
     A function upgrades SAP Host Agent with given SAR file!
 
+    If you want to put the parameters in pillar sls named 'saphostagent.sls'
+    Please create pillar data with below key names and structure. Key names must be exactly this you see below.
+    Do not forget to add this pillar to your /srv/pillar/top.sls file.
+
+    /srv/pillar/saphostagent.sls
+    saphost:
+      - sapcar_path: /nfsmnt/downloads
+      - saphostagent_sar_file: SAPHOSTAGENT45_45-20009394.SAR
+      - sar_file_path: /nfsmnt/downloads/saphostagent45
+
+    if you don't use pillar you can also add the params as below:
     CLI Example::
 
         salt '*' saphostagent.upgrades SAR_FILE="/nfsmnt/software/saphostagent45/SAPHOSTAGENT45_45-20009394.SAR"
@@ -182,6 +212,11 @@ def upgrade(**kwargs):
     for key, value in kwargs.items():
         if  "SAR_FILE" in key:
             sarfile = value
+        else:
+            ret_pillar_sarpath = __salt__['pillar.get']('saphost:sar_file_path', '')
+            ret_pillar_sarfile = __salt__['pillar.get']('saphost:saphostagent_sar_file', '')
+            sarfile = os.path.join(ret_pillar_sarpath, ret_pillar_sarfile)
+            log.info("sarfile: %s",sarfile,exc_info=1)
 
     if (len(sarfile) != 0):
         ret_file_sarfile = __salt__['file.file_exists'](sarfile)
@@ -201,3 +236,11 @@ def upgrade(**kwargs):
             return (True, output_dict)
     else:
         return (False, "no sufficient key value pairs provided. Refer to sys.doc saphostagent.upgrade for more information.")
+
+def get_pillar():
+    ret_pillar = __salt__['pillar.get']('saphost', '')
+    #ret_pillar = __salt__['pillar.get']('saphost:sapcar_path', 'testpath')
+    # for k, v in ret_pillar.items():
+    #     log.info(k)
+    log.info("pillar type: %s",ret_pillar,exc_info=1)
+    return (True, ret_pillar)
