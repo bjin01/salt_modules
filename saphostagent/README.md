@@ -3,8 +3,9 @@
 * __is_available__ - is saphostagent installed?
 * __is_running__ - is saphostagent running as systemd service 'sapinit'?
 * __get_version__ - returns SAP Host Agent Version and Patch Level.
-* __extract_exe__ - extracts given SAR file.
+* __extract_sar__ - extracts given SAR file.
 * __upgrade__ - upgrades SAP Host Agent with given SAR file.
+* __get_pillar__ - shows pillar key value pairs for definition "saphost".
 
 Using pillar to predefine the path and SAR file names create a pillar sls named 'saphostagent.sls'
 Please create pillar data with below key names and structure. Key names must be exactly this you see below.
