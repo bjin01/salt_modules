@@ -18,6 +18,7 @@ Do not forget to add this pillar to your /srv/pillar/top.sls file.
       - saphostagent_sar_file: SAPHOSTAGENT45_45-20009394.SAR
       - sar_file_path: /nfsmnt/downloads/saphostagent45
 ```
+### Usage:
 
 ```
 # salt "*" sys.doc saphostagent
