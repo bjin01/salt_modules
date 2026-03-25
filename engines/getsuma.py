@@ -237,7 +237,7 @@ def _logout_session(client, key):
     except Exception as exc:
         log.error('Unexpected error during logout for key %s: %s', key, exc)
 
-def start(interval=20):
+def start(interval=30):
 
     log.info("Starting GetSuma engine...")
     
@@ -249,7 +249,7 @@ def start(interval=20):
 
     try:
         while True:
-            log.info("------------------Update Suma groups as pillar------------------")
+            log.info("------------------Update Suma groups as pillar with interval: %d seconds-----", interval)
             try:
                 group_info = _get_system_groups(client, key)
                 log.info("GetSuma engine finished updating Suma groups.")
